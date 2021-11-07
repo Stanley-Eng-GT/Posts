@@ -31,18 +31,16 @@ class PostFragment : Fragment() , AdpItmPost.OnItemClickListener {
     private val postRecycleList = mutableListOf<PostModel>()
     private val adapter = AdpItmPost(postRecycleList, this)
 
-    private var searchTxt = ""
-
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentPostBinding.inflate(inflater, container, false)
 
         //setup Database
-        var sqlDb = SqliteDatabase.getInstance(requireActivity())
+        val sqlDb = SqliteDatabase.getInstance(requireActivity())
 
         //create repository, factory, View Model
         val postRepo = PostRepository(sqlDb.postDAO)
@@ -69,7 +67,7 @@ class PostFragment : Fragment() , AdpItmPost.OnItemClickListener {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
-                    searchTxt = newText
+                    postViewModel.searchTxt = newText
                 }
                 resetRecycleView()
                 return false
@@ -89,7 +87,7 @@ class PostFragment : Fragment() , AdpItmPost.OnItemClickListener {
     }
 
     private fun initRecyclerView() {
-        var layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
         binding.frgPostRcyVw.layoutManager = layoutManager
         binding.frgPostRcyVw.addItemDecoration(
             DividerItemDecoration(
@@ -109,7 +107,7 @@ class PostFragment : Fragment() , AdpItmPost.OnItemClickListener {
 
         if (it != null) {
             for (i in it) {
-                if (searchTxt == "" || i.title.contains(searchTxt) || i.body.contains(searchTxt))
+                if (postViewModel.searchTxt == "" || i.title.contains(postViewModel.searchTxt) || i.body.contains(postViewModel.searchTxt))
                     postRecycleList.add(i)
             }
         }

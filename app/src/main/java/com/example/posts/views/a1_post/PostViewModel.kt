@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 class PostViewModel(private val postRepo: PostRepository, private val commentRepo: CommentRepository): ViewModel(),
     Observable {
 
+    var searchTxt = ""
     val postLiveData = postRepo.posts
 
     fun updatePost()= viewModelScope.launch{

@@ -22,22 +22,17 @@ class CommentFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var commentViewModel: CommentViewModel
 
-    private var searchTxt=""
-
     private val commentRecycleList = mutableListOf<CommentModel>()
     private val adapter = AdpItmComment( commentRecycleList)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_comment, container, false)
-
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentCommentBinding.inflate(inflater, container, false)
 
         //setup Database
-        var sqlDb = SqliteDatabase.getInstance(requireActivity())
+        val sqlDb = SqliteDatabase.getInstance(requireActivity())
 
         //create repository, factory, View Model
         val commentsRepo = CommentRepository(sqlDb.commentDAO)
@@ -64,7 +59,7 @@ class CommentFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText!= null){
-                    searchTxt = newText
+                    commentViewModel.searchTxt = newText
                 }
                 resetRecycleView()
                 Log.d("Stanley", "Successful 2")
@@ -79,7 +74,7 @@ class CommentFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        var layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
         binding.frgComRcyVw.layoutManager = layoutManager
         binding.frgComRcyVw.addItemDecoration(DividerItemDecoration(binding.frgComRcyVw.context, layoutManager.orientation))
         binding.frgComRcyVw.adapter= adapter
@@ -95,7 +90,7 @@ class CommentFragment : Fragment() {
         if (it != null) {
             Log.d("Stanley", commentViewModel.postId.toString())
             for (i in it) {
-                if (i.postId == commentViewModel.postId &&(searchTxt == "" || i.name.contains(searchTxt) || i.email.contains(searchTxt)|| i.body.contains(searchTxt)) ) {
+                if (i.postId == commentViewModel.postId &&(commentViewModel.searchTxt == "" || i.name.contains(commentViewModel.searchTxt) || i.email.contains(commentViewModel.searchTxt)|| i.body.contains(commentViewModel.searchTxt)) ) {
                     commentRecycleList.add(i)
                 }
             }

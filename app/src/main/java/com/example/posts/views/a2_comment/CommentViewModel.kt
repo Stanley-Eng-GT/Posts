@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.posts.repo.CommentRepository
 
-class CommentViewModel (private val commentRepo: CommentRepository): ViewModel(), Observable {
+class CommentViewModel (commentRepo: CommentRepository): ViewModel(), Observable {
+    var searchTxt=""
     val commentLiveData = commentRepo.comments
 
     @Bindable
